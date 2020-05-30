@@ -1,4 +1,5 @@
-#EXTRACCIÓN DE INFORMACIÓN DE MODELOS DE CIRCULACIÓN GENERAL (GCM'S) DE LA FASE CMIP5-IPCC===========================
+#EXTRACCIÓN DE INFORMACIÓN A PARTIR DE ARCHIVOS NETCDF USANDO SHAPEFILES======================
+#CASO: MODELOS DE CIRCULACIÓN GENERAL (GCM'S) DE LA FASE CMIP5-IPCC===========================
 
 #1. Configuramos el directorio de trabajo
 setwd("C:/Users/Julio/Desktop/DATOS CMIP5/IPSL-CM5A-MR")
