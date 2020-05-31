@@ -1,109 +1,83 @@
-#EXTRACCIÓN DE INFORMACIÓN A PARTIR DE ARCHIVOS NETCDF USANDO SHAPEFILES======================
-#CASO: USANDO DATOS GRILLADOS PISCO V2.1 - SENAMHI===========================
 
-#1. Configuramos el directorio de trabajo
-setwd("C:/TEMPORAL/RSMINERVEWORKMAY2020")
+##########################################################################
+#TRATAMIENTO PRIMARIO DE DATOS PISCO A PARTIR DE ARCHIVO PRINCIPAL NetCDF#
+########################################################################## 
 
-#2. Apertura de librerías a usar
+#Cargamos ó instalamos librerías principales
 library(raster)
 library(ggplot2)
 library(ncdf4)
 library(maptools)
-library(sf)
-library(rgdal)
 
-#3. Damos lectura al archivo shapefile (puntos de estaciones)
-pt = shapefile("C:/TEMPORAL/RSMINERVEWORKMAY2020/SHAPE STATIONS/Mantaro_Geo.shp")
-pt = shapefile("C:/TEMPORAL/RSMINERVEWORKMAY2020/SHAPE CUENCAS/SHAPE STATIONS/Estaciones_Catchira_GEO.shp")
+#Fijamos el directorio de trabajo
+setwd("C:/TEMPORAL/RSMINERVEWORKMAY2020/NetCDF files")     ## Ubicación de la carpeta donde est?n los archivos *.tif o el *.nc
+ts = seq(as.Date("1981-01-01"),as.Date("1982-05-31"),by = "day")## Secuencia de fechas (año%-mes%-día%), puede cambiar "month" por "day" o "year"
 
-pt@coords <- pt@coords[,1:2]
-#data <- st_read(""C:/TEMPORAL/RSMINERVEWORKMAY2020/SHAPE STATIONS/Mantaro_Geo.shp)
-head(data)
+##st = stack(list.files(pattern=".tif"))## Si son *.tif
+nc = brick("C:/TEMPORAL/RSMINERVEWORKMAY2020/NetCDF files/PISCOpd.nc")## Si es *.nc
 
-#NOTA: Tener en cuenta que el archivo shapefile debe estar en COORDENADAS GEOGRÁFICAS (WGS84 GEO, ambas con signo negativo) 
-#y a la coordenada de longitud original se le debe de sumar 360 grados
+##########################################################################
+#Caso shapefile de puntos(estaciones) - DATOS DIARIOS!                   #
+########################################################################## 
 
-#4. Definimos series de tiempo a escala diaria para acoplarlas a los dataframes
-ts1 = seq(as.Date("1981-01-01"),as.Date("1990-12-30"),by = "day")
-#ts2 = seq(as.Date("1956-01-01"),as.Date("1960-12-31"),by = "day")
-#ts3 = seq(as.Date("1961-01-01"),as.Date("1965-12-31"),by = "day")
-#ts4 = seq(as.Date("1966-01-01"),as.Date("1970-12-31"),by = "day")
-#ts5 = seq(as.Date("1971-01-01"),as.Date("1975-12-31"),by = "day")
-#.....
-#....
-#Seguir colocando ts's si se necesitase.
+pt = shapefile("C:/TEMPORAL/RSMINERVEWORKMAY2020/SHAPE STATIONS/Mantaro_Geo.shp") ## Si tiene puntos como shp
+ext = extract(nc,pt)## Extract, para sacar los puntos
+df=data.frame(ext)
 
-#5. Definimos bricks para archivos NetCDF para el período histórico y RCP's
+#Si deseas obtener datos en un período puntual, debes recurrir a eliminar columnas
+#del dataframe formado por los datos diarios desde 1981.
+length(ts)
+df[length(ts)+1:13149] <- list(NULL)
+#Transponemos el dataframe
+df <- data.frame(t(df))
 
-#Datos históricos del modelo GCM
-nc1 = brick("C:/TEMPORAL/RSMINERVEWORKMAY2020/NetCDF files/PISCOpd.nc",na.rm = TRUE)
-#nc2 = brick("C:/Users/Julio/Desktop/DATOS CMIP5/IPSL-CM5A-MR/pr_SAM-44_IPSL-IPSL-CM5A-MR_historical_r1i1p1_SMHI-RCA4_v3_day_19560101-19601231.nc",na.rm = TRUE)
-#nc3 = brick("C:/Users/monte/Desktop/DATOS CMIP5/IPSL-CM5A-MR/pr_SAM-44_IPSL-IPSL-CM5A-MR_historical_r1i1p1_SMHI-RCA4_v3_day_19610101-19651231.nc",na.rm = TRUE)
-#nc4 = brick("C:/Users/monte/Desktop/DATOS CMIP5/IPSL-CM5A-MR/pr_SAM-44_IPSL-IPSL-CM5A-MR_historical_r1i1p1_SMHI-RCA4_v3_day_19660101-19701231.nc",na.rm = TRUE)
-#nc5 = brick("C:/Users/monte/Desktop/DATOS CMIP5/IPSL-CM5A-MR/pr_SAM-44_IPSL-IPSL-CM5A-MR_historical_r1i1p1_SMHI-RCA4_v3_day_19710101-19751231.nc",na.rm = TRUE)
-#.....
-#....
-#Seguir colocando nc's si se necesitase.
+#Asignamos nombres a filas y columnas acorde a fechas y estaciones respectivamente
+rownames(df) <- ts
+estaciones<-c(pt@data[["ESTACIÃ.N"]])
+names(df)<-estaciones
 
-#Datos proyectactos RCP2.6
-#nc12 = brick("C:/Users/monte/Desktop/DATOS CMIP5/IPSL-CM5A-MR/pr_SAM-44_IPSL-IPSL-CM5A-MR_rcp45_r1i1p1_SMHI-RCA4_v3_day_20060101-20101231.nc",na.rm = TRUE)
-#nc13 = brick("C:/Users/monte/Desktop/DATOS CMIP5/IPSL-CM5A-MR/pr_SAM-44_IPSL-IPSL-CM5A-MR_rcp45_r1i1p1_SMHI-RCA4_v3_day_20110101-20151231.nc",na.rm = TRUE)
-#nc14 = brick("C:/Users/monte/Desktop/DATOS CMIP5/IPSL-CM5A-MR/pr_SAM-44_IPSL-IPSL-CM5A-MR_rcp45_r1i1p1_SMHI-RCA4_v3_day_20160101-20201231.nc",na.rm = TRUE)
-#nc15 = brick("C:/Users/monte/Desktop/DATOS CMIP5/IPSL-CM5A-MR/pr_SAM-44_IPSL-IPSL-CM5A-MR_rcp45_r1i1p1_SMHI-RCA4_v3_day_20210101-20251231.nc",na.rm = TRUE)
-#.....
-#....
-#Seguir colocando nc's si se necesitase.
+#Extraemos datos de una estación
+JAUJA<-df[,c("JAUJA")]
 
-#Datos proyectados RCP4.5
-#nc31 = brick("C:/Users/monte/Desktop/DATOS/DATOS CMIP5/IPSL-CM5A-MR/pr_SAM-44_IPSL-IPSL-CM5A-MR_rcp45_r1i1p1_SMHI-RCA4_v3_day_20060101-20101231.nc",na.rm = TRUE)
-#nc32 = brick("C:/Users/monte/Desktop/DATOS/DATOS CMIP5/IPSL-CM5A-MR/pr_SAM-44_IPSL-IPSL-CM5A-MR_rcp45_r1i1p1_SMHI-RCA4_v3_day_20110101-20151231.nc",na.rm = TRUE)
-#nc33 = brick("C:/Users/monte/Desktop/DATOS/DATOS CMIP5/IPSL-CM5A-MR/pr_SAM-44_IPSL-IPSL-CM5A-MR_rcp45_r1i1p1_SMHI-RCA4_v3_day_20160101-20201231.nc",na.rm = TRUE)
-#nc34 = brick("C:/Users/monte/Desktop/DATOS/DATOS CMIP5/IPSL-CM5A-MR/pr_SAM-44_IPSL-IPSL-CM5A-MR_rcp45_r1i1p1_SMHI-RCA4_v3_day_20210101-20251231.nc",na.rm = TRUE)
-#nc35 = brick("C:/Users/monte/Desktop/DATOS/DATOS CMIP5/IPSL-CM5A-MR/pr_SAM-44_IPSL-IPSL-CM5A-MR_rcp45_r1i1p1_SMHI-RCA4_v3_day_20260101-20301231.nc",na.rm = TRUE)
-#.....
-#....
-#Seguir colocando nc's si se necesitase.
+#USANDO PLOT() PARA GRAFICAR LA SERIE DE UNA ESTACIÓN DE INTERÉS
+#Gráfico simple
+df2 = data.frame(ts,JAUJA)                                          
+plot(df2,main="PRECIPITACIÓN DIARIA 1981-2018 ESTACIÓN JAUJA",xlab="tiempo(días)", ylab="precipitación (mm)",type = "l")
+#Boxplot
+boxplot(df2$JAUJA, main="BOXPLOT", xlab="Precipitación diaria (mm)", ylab="JAUJA", horizontal=TRUE,col=terrain.colors(3))
 
-#Datos proyectados RCP8.5
-#nc50 = brick("C:/Users/monte/Desktop/DATOS CMIP5/IPSL-CM5A-MR/pr_SAM-44_IPSL-IPSL-CM5A-MR_rcp85_r1i1p1_SMHI-RCA4_v3_day_20060101-20101231.nc",na.rm = TRUE)
-#nc51 = brick("C:/Users/monte/Desktop/DATOS CMIP5/IPSL-CM5A-MR/pr_SAM-44_IPSL-IPSL-CM5A-MR_rcp85_r1i1p1_SMHI-RCA4_v3_day_20110101-20151231.nc",na.rm = TRUE)
-#nc52 = brick("C:/Users/monte/Desktop/DATOS CMIP5/IPSL-CM5A-MR/pr_SAM-44_IPSL-IPSL-CM5A-MR_rcp85_r1i1p1_SMHI-RCA4_v3_day_20160101-20201231.nc",na.rm = TRUE)
-#nc53 = brick("C:/Users/monte/Desktop/DATOS CMIP5/IPSL-CM5A-MR/pr_SAM-44_IPSL-IPSL-CM5A-MR_rcp85_r1i1p1_SMHI-RCA4_v3_day_20210101-20251231.nc",na.rm = TRUE)
-#.....
-#....
-#Seguir colocando nc's si se necesitase.
+#USANDO GGPLOT2 PARA GRAFICAR LA SERIE DE UNA ESTACIÓN DE INTERÉS
+#Graficamos puntos en la estación ACOSTAMBO
+ggplot(data = df, mapping = aes(x = ts, 
+                                y = ACOSTAMBO))+ geom_line(alpha = 0.5,color = "blue")+labs(x = "tiempo(días)"
+                                                                                            ,y="Precipitación (mm)",title = "PRECIPITACIÓN DIARIA 1981-2018 ESTACIÓN JAUJA")
 
+#Guardamos archivo
+write.csv(df,"C:/TEMPORAL/RSMINERVEWORKMAY2020/NetCDF files/datoslluvia.csv")  ## Guardar como *.csv
 
+##########################################################################
+#Caso Coordenadas                                                        #
+########################################################################## 
+xy = cbind(-72.93199135377485,  -13.881556230479553)                    ## Introducir coordenadas
+ext = extract(nc, xy)                                                   ## Extraer sólo un punto   (nc o tif)   
 
-#6. Ahora usamos la función "ext" para extraer los datos de los archivos NetCDF
-ext1 = extract(nc1, pt)
-#ext2 = extract(nc2, pt)
-#ext3 = extract(nc3, pt)
-#ext4 = extract(nc4, pt)
-#ext5 = extract(nc5, pt)
-#.....
-#....
-#Seguir colocando ext's si se necesitase.
+#Guardamos archivo
+write.csv(ext,"C:/TEMPORAL/RSMINERVEWORKMAY2020/NetCDF files/estacionX.csv")   ## Cambia la dirección para guardar
 
+##########################################################################
+#Caso polígonos                                                          #
+##########################################################################
 
-#7. Ploteamos como prueba un resultado
-plot(ext1[2,],type = "l")
+# Si lo que quiere es sacar una media o sumatoria de un polígono en base a rásters
 
-#8.Obteniendo una columna con fechas acorde al archivo NetCDF
-idx <- getZ(nc1)
-
-#9. Generamos los data frames para cada información extraída de cada archivo NetCDF
-df1 = data.frame(ext1); colnames(df1) <- data$ESTACIÓN
-#df2 = data.frame(t(ext2)-273,15); colnames(df2) <- data$ESTACIÓN
-#df3 = data.frame(t(ext3)-273,15); colnames(df2) <- data$ESTACIÓN
-#df4 = data.frame(t(ext4)-273,15); colnames(df2) <- data$ESTACIÓN
-#df5 = data.frame(t(ext5)-273,15); colnames(df2) <- data$ESTACIÓN
-#.....
-#....
-#Seguir colocando df's si se necesitase.
-
-#10. Guardamos en un archivo .csv el dataframe que deseamos
-write.table(t(ext1),file="C:/TEMPORAL/RSMINERVEWORKMAY2020/NetCDF files/subcuencas-datos.csv", col.names=NA, sep=",")  
-#.....
-#....
-#Seguir colocando df's si se necesitase.
+list<-list.files("C:/TEMPORAL/RSMINERVEWORKMAY2020/raster files","\\.tif$")          ## Lista de archivos *.tif 
+Area2 = shapefile("C:/TEMPORAL/RSMINERVEWORKMAY2020/SHAPE CUENCAS/Mantaro_GEO_Cuencast.shp")
+mapply(function(i){
+  mk = mask(crop(raster(list[i]),Area2),Area2)## corta la imagen o el paquete de imágenes (como un clip)
+  a = mean(getValues(mk),na.rm=T)## cambia sum por mean o la función que requiera
+  print(i)
+  return(a)},1:length(list))
+##########################################################################
+#Ahora es tu turno!, puedes Mejorar el script!                           #
+##########################################################################
+                                       
