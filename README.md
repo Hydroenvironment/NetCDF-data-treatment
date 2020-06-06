@@ -1,1 +1,14 @@
-# NetCDF-Data-Treatment
+
+[![R build status](https://github.com/csaybar/rgee/workflows/R-CMD-check/badge.svg)](https://github.com/Hydroenvironment/CMIP6-WORLDCLIM-HANDLING/actions)
+[![Project Status: Active – The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![License](https://img.shields.io/badge/license-MIT-green)](https://opensource.org/licenses/MIT)
+
+# NetCDF-DATA-TREATMENT
+<img src="https://www.researchgate.net/publication/315950787/figure/fig3/AS:567797237248005@1512384818972/An-example-of-how-a-dataset-netCDF-or-xarray-for-a-weather-forecast-might-be.png" align="center" hspace="10" vspace="6" width="30%"></a>
+
+🌏 NetCDF (Network Common Data Form) is a set of software libraries and machine-independent data formats that support the creation, access, and sharing of array-oriented scientific data. It is also a community standard for sharing scientific data. The Unidata Program Center supports and maintains netCDF programming interfaces for C, C++, Java, and Fortran. Programming interfaces are also available for Python, IDL, MATLAB, R, Ruby, and Perl.
+
+✅Useful scripts for treatment of NetCDF datasets.
+
