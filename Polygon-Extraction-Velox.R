@@ -69,7 +69,7 @@ raster.in = "C:/TEMPORAL/RSMINERVEWORKMAY2020/NetCDF files/ppMask.tif"
 shp.out   = "C:/TEMPORAL/RSMINERVEWORKMAY2020/NetCDF files/ppZonal.shp"
 
 shp = ZonalPipe(zone.in, raster.in, stat="mean")
-tbpp = read.csv("C:/TEMPORAL/RSMINERVEWORKMAY2020/NetCDF files/tablaPP.csv", header = T, sep = ",")
+tbpp = write.csv(shp,"C:/TEMPORAL/RSMINERVEWORKMAY2020/NetCDF files/tablaPP.csv", header = T, sep = ",")
 
 # Media para cada subcuenca
 # len = nlayers(ppmask)
