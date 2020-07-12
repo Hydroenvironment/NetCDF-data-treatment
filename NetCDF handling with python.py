@@ -8,7 +8,7 @@ netcdf4-python -- http://code.google.com/p/netcdf4-python/
 Fuente de datos: NCEP/NCAR Reanalysis -- Kalnay et al. 1996
 http://dx.doi.org/10.1175/1520-0477(1996)077<0437:TNYRP>2.0.CO;2
 '''
-import datetime as dt  # Python standard library datetime  module
+import datetime as dt  # Incluiremos la librería datetime
 import numpy as np
 from netCDF4 import Dataset  # http://code.google.com/p/netcdf4-python/
 import matplotlib.pyplot as plt
