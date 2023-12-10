@@ -17,7 +17,7 @@ library(viridis)
 library(weathermetrics)
 
 #IMPORTANDO EL ARCHIVO NetCDF  ======================================
-Puede descargar un archivo de ejemplo usando el siguiente enlace: https://drive.google.com/file/d/1nih40HLDDpbHPQO0KRHe6Tl01GlaL3vx/view?usp=sharing
+#Puede descargar un archivo de ejemplo usando el siguiente enlace: https://drive.google.com/file/d/1nih40HLDDpbHPQO0KRHe6Tl01GlaL3vx/view?usp=sharing
 # Definimos la ruta
 file_path <- "G:\\WEBINAR CMIP6 R PYTHON\\pr_day_MPI-ESM1-2-HR_ssp585_r1i1p1f1_gn_20150101-20191231.nc"
 var<-"pr"
