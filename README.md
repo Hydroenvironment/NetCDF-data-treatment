@@ -14,3 +14,8 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 <img src="https://icons-for-free.com/iconfiles/png/512/command+console+php+programmer+prompt+seo+icon-1320191020194645741.png" align="center" hspace="10" vspace="6" width="3%"></a>
 Author: Julio Montenegro Gambini, MSc., P.E.
 
+🌐Facebook:https://shorturl.at/msyIS
+🌐Twitter: https://shorturl.at/epFIY
+🌐Linkedin:https://shorturl.at/lsuW3
+🌐Instagram:https://shorturl.at/dBMZ7
+
