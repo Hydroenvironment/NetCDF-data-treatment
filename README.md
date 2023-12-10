@@ -6,7 +6,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![License](https://img.shields.io/badge/license-MIT-green)](https://opensource.org/licenses/MIT)
 
 # NetCDF-DATA-TREATMENT
-<img src="https://web.itu.edu.tr/~tokerem/Presentation/netcdf_1.png" align="center" hspace="20" vspace="12" width="30%"></a>
+<img src="https://web.itu.edu.tr/~tokerem/Presentation/netcdf_1.png" align="center" hspace="20" vspace="12" width="60%"></a>
 
 🌏 NetCDF (Network Common Data Form) is a set of software libraries and machine-independent data formats that support the creation, access, and sharing of array-oriented scientific data. It is also a community standard for sharing scientific data.
 ✅Useful scripts for treatment of NetCDF datasets.
