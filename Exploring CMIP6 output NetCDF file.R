@@ -48,17 +48,13 @@ nc_data$dim$time$units
 
 nc_data$dim$time$calendar
 
-
-#Algunos de los paquetes estándar de tidyverse también son útiles y deberían 
-#cargarse para ejecutar el código de ejemplo de esta viñeta:
+#Obteniendo el paso temporal
+time <- ncvar_get(nc_data,"time")
+time
 
 pr_time <- nc.get.time.series(nc_data, v = "pr",
                                time.dim.name = "time")
 pr_time[c(1:3, length(pr_time) - 2:0)]
-
-#Obteniendo el paso temporal
-time <- ncvar_get(nc_data,"time")
-time
 
 tunit <- ncatt_get(nc_data,"time","units")
 nt <- dim(time)
